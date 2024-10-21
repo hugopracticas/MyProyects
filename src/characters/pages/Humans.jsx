@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getCharacters, getCharactersByHumans } from "../data/getCharacters";
-import { CardList, Loading } from "../components";
+import { CardList, Loading, NothingToShow } from "../components";
+import text from "../../config/text.json";
+import { Buttons } from "../components/Buttons";
 
 export const Humans = () => {
   const [characters, setCharacters] = useState([]);
@@ -19,7 +21,7 @@ export const Humans = () => {
 
   const getData = async () => {
     const { content, pagination } = await getCharacters(counter);
-    const result = content.filter((human) => human.race === "Human");
+    const result = content.filter((human) => human.race === text.human);
 
     setCharacters(result);
     setIsLoading(false);
@@ -31,18 +33,17 @@ export const Humans = () => {
 
   return (
     <div>
-      <h1>Humans</h1>
-      {isLoading ? <Loading /> : <CardList characters={characters} />}
+      <h1>{text.humans}</h1>
+      {isLoading ? (
+        <Loading />
+      ) : characters.length === 0 ? (
+        <NothingToShow />
+      ) : (
+        <CardList characters={characters} />
+      )}
 
-      <div>
-        <button className="btn btn-outline-success" onClick={increment}>
-          Next
-        </button>
-        <p>{counter}</p>
-        <button className="btn btn-outline-success" onClick={decrement}>
-          Previous
-        </button>
-      </div>
+      <Buttons increment={increment} decrement={decrement} />
+      <p>{counter}</p>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getCharacters } from "../data/getCharacters";
-import { CardList, Loading } from "../components";
+import { CardList, Loading, NothingToShow } from "../components";
+import text from "../../config/text.json";
+import { Buttons } from "../components/Buttons";
 
 export const Demons = () => {
   const [characters, setCharacters] = useState([]);
@@ -30,18 +32,17 @@ export const Demons = () => {
 
   return (
     <div>
-      <h1>Demons</h1>
-      {isLoading ? <Loading /> : <CardList characters={characters} />}
+      <h1>{text.demons}</h1>
+      {isLoading ? (
+        <Loading />
+      ) : characters.length === 0 ? (
+        <NothingToShow />
+      ) : (
+        <CardList characters={characters} />
+      )}
 
-      <div>
-        <button className="btn btn-outline-success" onClick={increment}>
-          Next
-        </button>
-        <p>{counter}</p>
-        <button className="btn btn-outline-success" onClick={decrement}>
-          Previous
-        </button>
-      </div>
+      <Buttons increment={increment} decrement={decrement} />
+      <p>{counter}</p>
     </div>
   );
 };
