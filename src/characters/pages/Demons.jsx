@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getCharacters } from "../data/getCharacters";
-import { CardList, Loading, NothingToShow } from "../components";
+import { CardContainer } from "../components";
 import text from "../../config/text.json";
 import { Buttons } from "../components/Buttons";
 
@@ -21,7 +21,7 @@ export const Demons = () => {
 
   const getData = async () => {
     const { content } = await getCharacters(counter);
-    const result = content.filter((human) => human.race === "Demon");
+    const result = content.filter((human) => human.race === text.demon);
     setCharacters(result);
     setIsLoading(false);
   };
@@ -30,17 +30,15 @@ export const Demons = () => {
     getData();
   }, [counter]);
 
+  const dataInformation = {
+    race: text.demons,
+    isLoading,
+    characters,
+  };
+
   return (
     <div>
-      <h1>{text.demons}</h1>
-      {isLoading ? (
-        <Loading />
-      ) : characters.length === 0 ? (
-        <NothingToShow />
-      ) : (
-        <CardList characters={characters} />
-      )}
-
+      <CardContainer dataInformation={dataInformation} />
       <Buttons increment={increment} decrement={decrement} />
       <p>{counter}</p>
     </div>

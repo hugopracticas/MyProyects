@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getCharacters, getCharactersByHumans } from "../data/getCharacters";
-import { CardList, Loading, NothingToShow } from "../components";
-import text from "../../config/text.json";
+import { getCharacters } from "../data/getCharacters";
+import { CardContainer } from "../components";
 import { Buttons } from "../components/Buttons";
+import text from "../../config/text.json";
+import "../../styles/containerCard.css";
 
 export const Humans = () => {
   const [characters, setCharacters] = useState([]);
@@ -20,7 +21,7 @@ export const Humans = () => {
   };
 
   const getData = async () => {
-    const { content, pagination } = await getCharacters(counter);
+    const { content } = await getCharacters(counter);
     const result = content.filter((human) => human.race === text.human);
 
     setCharacters(result);
@@ -31,17 +32,15 @@ export const Humans = () => {
     getData();
   }, [counter]);
 
+  const dataInformation = {
+    race: text.humans,
+    isLoading,
+    characters,
+  };
+
   return (
     <div>
-      <h1>{text.humans}</h1>
-      {isLoading ? (
-        <Loading />
-      ) : characters.length === 0 ? (
-        <NothingToShow />
-      ) : (
-        <CardList characters={characters} />
-      )}
-
+      <CardContainer dataInformation={dataInformation} />
       <Buttons increment={increment} decrement={decrement} />
       <p>{counter}</p>
     </div>
